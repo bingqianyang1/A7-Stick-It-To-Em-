@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.A7_Stick_It_To_Em">
         <activity
+            android:name=".SendStickerActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
