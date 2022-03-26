@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "150391323880",
+    "firebase_url": "https://a7teamfinalfour-default-rtdb.firebaseio.com",
+    "project_id": "a7teamfinalfour",
+    "storage_bucket": "a7teamfinalfour.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150391323880:android:6029e2e57943669412dd5d",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.a7_stick_it_to_em"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150391323880-1cjj32qr5l77qqbm247t01lc1tl6q7vc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU_TNmuJynFAKxawhvzfNJwhKwPUw7PpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150391323880-1cjj32qr5l77qqbm247t01lc1tl6q7vc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
