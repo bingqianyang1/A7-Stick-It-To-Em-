@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,7 +25,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class SendStickerActivity extends AppCompatActivity {
@@ -41,6 +44,7 @@ public class SendStickerActivity extends AppCompatActivity {
     private ArrayList<User> users = new ArrayList<>();
     private ArrayList<String> active_user_list = new ArrayList<>();
     private String s;
+    private String date_String;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +126,10 @@ public class SendStickerActivity extends AppCompatActivity {
                                         user.setReceived();
                                     }
                                     receiver_name = user.getUsername();
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+                                    Date date = new Date(System.currentTimeMillis());
+                                    date_String = formatter.format(date).toString();
+
                                     updateSender(database.getReference());
                                     updateReceiver(database.getReference());
 
@@ -209,6 +217,7 @@ public class SendStickerActivity extends AppCompatActivity {
 
 //                user.sentCount ++;
                 mutableData.setValue(user);
+
                 return Transaction.success(mutableData);
             }
 
@@ -221,6 +230,28 @@ public class SendStickerActivity extends AppCompatActivity {
 
 
         });
+
+//        database.child("Users").child(user_name).child("sent_history").runTransaction(new Transaction.Handler() {
+//            @NonNull
+//            @Override
+//            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+////                User user = mutableData.getValue(User.class);
+////                if (user == null) {
+////                    return Transaction.success(mutableData);
+////                }
+//                user.sent_history.put(receiver_name, selected_Sticker_String);
+//                mutableData.setValue(user.sent_history);
+//
+//                return Transaction.success(mutableData);
+//            }
+//
+//            @Override
+//            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+//
+//            }
+//        });
+
+
     }
 
     private void updateReceiver(DatabaseReference database) {
@@ -233,6 +264,7 @@ public class SendStickerActivity extends AppCompatActivity {
                     return Transaction.success(mutableData);
                 }
 
+                user.received_Number++;
                 switch (selected_Sticker_String) {
                     case "Sticker1":
                         user.received.put("Sticker1", user.received.get("Sticker1") + 1);
@@ -259,6 +291,45 @@ public class SendStickerActivity extends AppCompatActivity {
             }
 
 
+        });
+
+        database.child("Users").child(receiver_name).child("received_history").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+
+                    Map<String, Object> aHistory = new HashMap<>();
+                    aHistory.put("Sender", user_name);
+                    aHistory.put("Sticker", selected_Sticker_String);
+                    aHistory.put("Time", date_String);
+
+                    Map<String, Object> received_history = new HashMap<>();
+                    received_history.put("History1", aHistory);
+
+                    Map<String, Object> updated = new HashMap<>();
+                    updated.put("received_history", received_history);
+                    database.child("Users").child(receiver_name).updateChildren(updated);
+                }else {
+
+//                user.sent_history.put("History" + user.sent_history.size(),receiver_name + ": " + selected_Sticker_String);
+
+                    Map<String, Object> aHistory = new HashMap<>();
+                    aHistory.put("Sender", user_name);
+                    aHistory.put("Sticker", selected_Sticker_String);
+                    aHistory.put("Time", date_String);
+
+                    Map<String, Object> updated = new HashMap<>();
+                    updated.put("History" + user.received_Number, aHistory);
+                    database.child("Users").child(receiver_name).child("received_history").updateChildren(updated);
+                }
+//                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
     }
 

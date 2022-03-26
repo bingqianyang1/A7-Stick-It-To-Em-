@@ -7,7 +7,9 @@ public class User {
     public String username;
     public Map<String,Integer> sent;
     public Map<String,Integer> received;
-
+    public int received_Number;
+    public Map<String, Object> received_history;
+//    public ArrayList<String> sent_history;
     public User(){};
 
     public User(String username){
@@ -22,6 +24,10 @@ public class User {
         received.put("Sticker2", 0);
         received.put("Sticker3", 0);
         received.put("Sticker4", 0);
+//        this.sent_history = new ArrayList<>();
+        this.received_history = new HashMap<>();
+//        received_history.put("History_Number", "History");
+        received_Number = 0;
     }
 
     public String getUsername() {
