@@ -11,7 +11,7 @@ public class User {
         this.username = username;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
-        sent.put("1",100);
+        //sent.put("1",100);
     }
 
     public String getUsername() {
