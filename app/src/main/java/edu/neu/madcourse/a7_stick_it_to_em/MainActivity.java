@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        send.findViewById(R.id.send);
-        sendHistory.findViewById(R.id.sendHistory);
-        receiveHistroy.findViewById(R.id.receiveHistory);
+        send = findViewById(R.id.send);
+        sendHistory = findViewById(R.id.sendHistory);
+        receiveHistroy = findViewById(R.id.receiveHistory);
     }
 }

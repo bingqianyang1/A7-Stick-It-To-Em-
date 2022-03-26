@@ -31,7 +31,7 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, input.getText(),Toast.LENGTH_SHORT).show();
                 User user = new User(input.getText().toString());
                 reference.push().setValue(user);
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(Login.this,MainActivity.class);
                 startActivity(intent);
             }
         });

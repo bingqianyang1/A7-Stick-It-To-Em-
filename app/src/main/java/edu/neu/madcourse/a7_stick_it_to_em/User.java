@@ -5,12 +5,13 @@ import java.util.Map;
 
 public class User {
     private String username;
-    private Map<Integer,Integer> sent;
-    private Map <Integer,Integer> received;
+    private Map<String,Integer> sent;
+    private Map<String,Integer> received;
     User(String username){
         this.username = username;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
+        sent.put("1",100);
     }
 
     public String getUsername() {
@@ -21,11 +22,11 @@ public class User {
         this.username = username;
     }
 
-    public Map<Integer, Integer> getSent() {
+    public Map<String, Integer> getSent() {
         return sent;
     }
 
-    public Map<Integer, Integer> getReceived() {
+    public Map<String, Integer> getReceived() {
         return received;
     }
 }
