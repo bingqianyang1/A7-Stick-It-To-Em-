@@ -9,9 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Login extends AppCompatActivity {
     EditText input;
     Button btn;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private DatabaseReference reference = db.getReference().child("Users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +29,9 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Login.this, input.getText(),Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                User user = new User(input.getText().toString());
+                reference.push().setValue(user);
+                Intent intent = new Intent(Login.this,MainActivity.class);
                 startActivity(intent);
             }
         });
