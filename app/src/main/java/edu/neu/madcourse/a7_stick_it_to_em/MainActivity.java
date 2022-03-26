@@ -31,5 +31,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        sendHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, SendHistoryActivity.class);
+                i.putExtra("username", user_name);
+                startActivity(i);
+            }
+        });
+
     }
 }
