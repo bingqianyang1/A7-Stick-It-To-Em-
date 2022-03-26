@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -35,6 +37,7 @@ public class SendStickerActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private User user;
     private String user_name;
+    private String receiver_name;
     private ArrayList<User> users = new ArrayList<>();
     private ArrayList<String> active_user_list = new ArrayList<>();
     private String s;
@@ -113,29 +116,24 @@ public class SendStickerActivity extends AppCompatActivity {
                         StrictMode.setThreadPolicy(policy);
                         if (isNetworkOnline()) {
                             //update the send count in database
-                            updateCount(database.getReference());
-//                            new Thread(new Runnable() {
-//                                @Override
-//                                public void run() {
-                                    for (User user : users) {
-                                        if (user.getUsername().equals(receiver.getText().toString())) {
-                                            if (user.received == null){
-                                                user.setReceived();
-                                            }
-////                                            int sent_count = user.getSent().get(selected_Sticker_String);
-                                            user.received.put("1", 1);
-//                                            user.getReceived().put("1", 1);
-//                                            user.getSent().put(selected_Sticker_String, 1);
-//                                            alertDialog.setMessage("Please select an image").show();
-//                                            /** send message to receiver add here */
+                            for (User user : users) {
+                                if (user.getUsername().equals(receiver.getText().toString())) {
+                                    if (user.received == null){
+                                        user.setReceived();
+                                    }
+                                    receiver_name = user.getUsername();
+                                    updateSender(database.getReference());
+                                    updateReceiver(database.getReference());
+
+
+
+                                    /** send message to receiver add here */
 //                                            sendMessageToSpecUser(user.CLIENT_REGISTRATION_TOKEN);
 //                                            Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
 
-                                            receiver.setText("");
-                                        }
-                                    }
-//                                }
-//                            }).start();
+                                    receiver.setText("");
+                                }
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
                         }
@@ -151,19 +149,19 @@ public class SendStickerActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.sticker1:
                 selected_Sticker = R.drawable.sticker1;
-                selected_Sticker_String = "1";
+                selected_Sticker_String = "Sticker1";
                 break;
             case R.id.sticker2:
                 selected_Sticker = R.drawable.sticker2;
-                selected_Sticker_String = "2";
+                selected_Sticker_String = "Sticker2";
                 break;
             case R.id.sticker3:
                 selected_Sticker = R.drawable.sticker3;
-                selected_Sticker_String = "3";
+                selected_Sticker_String = "Sticker3";
                 break;
             case R.id.sticker4:
                 selected_Sticker = R.drawable.sticker4;
-                selected_Sticker_String = "4";
+                selected_Sticker_String = "Sticker4";
                 break;
         }
 
@@ -184,7 +182,7 @@ public class SendStickerActivity extends AppCompatActivity {
         return isOnline;
     }
 
-    private void updateCount(DatabaseReference database) {
+    private void updateSender(DatabaseReference database) {
         database.child("Users").child(user_name).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
@@ -193,7 +191,63 @@ public class SendStickerActivity extends AppCompatActivity {
                 if (user == null) {
                     return Transaction.success(mutableData);
                 }
-                user.sent.put("1", 1);
+
+                switch (selected_Sticker_String) {
+                    case "Sticker1":
+                        user.sent.put("Sticker1", user.sent.get("Sticker1") + 1);
+                        break;
+                    case "Sticker2":
+                        user.sent.put("Sticker2", user.sent.get("Sticker2") + 1);
+                        break;
+                    case "Sticker3":
+                        user.sent.put("Sticker3", user.sent.get("Sticker3") + 1);
+                        break;
+                    case "Sticker4":
+                        user.sent.put("Sticker4", user.sent.get("Sticker4") + 1);
+                        break;
+                }
+
+//                user.sentCount ++;
+                mutableData.setValue(user);
+                return Transaction.success(mutableData);
+            }
+
+
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                //N/A
+            }
+
+
+        });
+    }
+
+    private void updateReceiver(DatabaseReference database) {
+        database.child("Users").child(receiver_name).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                User user = mutableData.getValue(User.class);
+                if (user == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                switch (selected_Sticker_String) {
+                    case "Sticker1":
+                        user.received.put("Sticker1", user.received.get("Sticker1") + 1);
+                        break;
+                    case "Sticker2":
+                        user.received.put("Sticker2", user.received.get("Sticker2") + 1);
+                        break;
+                    case "Sticker3":
+                        user.received.put("Sticker3", user.received.get("Sticker3") + 1);
+                        break;
+                    case "Sticker4":
+                        user.received.put("Sticker4", user.received.get("Sticker4") + 1);
+                        break;
+                }
+
 //                user.sentCount ++;
                 mutableData.setValue(user);
                 return Transaction.success(mutableData);

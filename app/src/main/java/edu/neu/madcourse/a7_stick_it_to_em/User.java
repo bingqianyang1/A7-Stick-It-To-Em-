@@ -14,7 +14,14 @@ public class User {
         this.username = username;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
-//        sent.put("1",100);
+        sent.put("Sticker1", 0);
+        sent.put("Sticker2", 0);
+        sent.put("Sticker3", 0);
+        sent.put("Sticker4", 0);
+        received.put("Sticker1", 0);
+        received.put("Sticker2", 0);
+        received.put("Sticker3", 0);
+        received.put("Sticker4", 0);
     }
 
     public String getUsername() {
