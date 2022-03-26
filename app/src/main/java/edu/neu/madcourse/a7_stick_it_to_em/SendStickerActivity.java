@@ -18,18 +18,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class SendStickerActivity extends AppCompatActivity {
     private int selected_Sticker = 0;
+    private String selected_Sticker_String = "";
     private Button send_button;
     private TextView receiver;
     private FirebaseDatabase database;
+    private User user;
     private String user_name;
+    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<String> active_user_list = new ArrayList<>();
+    private String s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,33 +45,35 @@ public class SendStickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send_sticker);
         send_button = (Button) findViewById(R.id.btn_sent);
         receiver = findViewById(R.id.receiver);
+        user_name = getIntent().getStringExtra("username");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        if (user_name == null){
+            alertDialog.setMessage("Please select an image").show();
+        }
 
         database = FirebaseDatabase.getInstance();
-        database.getReference().child("users").addChildEventListener(new ChildEventListener() {
+        database.getReference().child("Users").addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                user_name = snapshot.getValue().toString();
-//
-//                assert user != null;
-//                if (!user.username.equals(username)) {
-//                    users.add(user);
-//                    active_user_list.add(user.username);
-////                    adapter.notifyDataSetChanged();
-//                }
+                user = (User) snapshot.getValue(User.class);
+                assert user != null;
+                if (!user.getUsername().equals(user_name)) {
+                    users.add(user);
+                    active_user_list.add(user.getUsername());
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                user = snapshot.getValue(User.class);
-//                if (Objects.requireNonNull(snapshot.getKey()).equalsIgnoreCase(username)) {
-//                    TextView textView = findViewById(R.id.selectEmoji);
-//
-//                    //Display how many stickers a user has sent
-//                    textView.setText(
-//                            String.format("%s" + " has sent %s stickers!", user.username, user.sentCount)
-//                    );
-//                }
+                user = (User) snapshot.getValue(User.class);
+                if (Objects.requireNonNull(snapshot.getKey()).equalsIgnoreCase(user_name)) {
+                    TextView textView = findViewById(R.id.selectEmoji);
+
+                    //Display the User name
+                    textView.setText(String.format("User name: %s", user.getUsername()));
+                }
             }
 
             @Override
@@ -82,14 +92,14 @@ public class SendStickerActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
 
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V){
                 /** Search the receiver from the database */
                 /** To be add Here*/
-                if (selected_Sticker == 0) {
+                if (selected_Sticker == 0 || selected_Sticker_String == "") {
                     alertDialog.setMessage("Please select an image").show();
                 }
                 /**
@@ -103,18 +113,27 @@ public class SendStickerActivity extends AppCompatActivity {
                         StrictMode.setThreadPolicy(policy);
                         if (isNetworkOnline()) {
                             //update the send count in database
-//                            updateCount(database);
+                            updateCount(database.getReference());
 //                            new Thread(new Runnable() {
 //                                @Override
 //                                public void run() {
-//                                    for (User user : users) {
-//                                        if (user.username.equals(selectedUserName)) {
-//                                            sendHistory.put(user.username, selectedSticker);
-//
+                                    for (User user : users) {
+                                        if (user.getUsername().equals(receiver.getText().toString())) {
+                                            if (user.received == null){
+                                                user.setReceived();
+                                            }
+////                                            int sent_count = user.getSent().get(selected_Sticker_String);
+                                            user.received.put("1", 1);
+//                                            user.getReceived().put("1", 1);
+//                                            user.getSent().put(selected_Sticker_String, 1);
+//                                            alertDialog.setMessage("Please select an image").show();
+//                                            /** send message to receiver add here */
 //                                            sendMessageToSpecUser(user.CLIENT_REGISTRATION_TOKEN);
-//                                            selectedUserName = "";
-//                                        }
-//                                    }
+//                                            Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
+
+                                            receiver.setText("");
+                                        }
+                                    }
 //                                }
 //                            }).start();
                         } else {
@@ -132,17 +151,22 @@ public class SendStickerActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.sticker1:
                 selected_Sticker = R.drawable.sticker1;
+                selected_Sticker_String = "1";
                 break;
             case R.id.sticker2:
                 selected_Sticker = R.drawable.sticker2;
+                selected_Sticker_String = "2";
                 break;
             case R.id.sticker3:
                 selected_Sticker = R.drawable.sticker3;
+                selected_Sticker_String = "3";
                 break;
             case R.id.sticker4:
                 selected_Sticker = R.drawable.sticker4;
+                selected_Sticker_String = "4";
                 break;
         }
+
     }
 
 
@@ -158,6 +182,30 @@ public class SendStickerActivity extends AppCompatActivity {
         }
 
         return isOnline;
+    }
+
+    private void updateCount(DatabaseReference database) {
+        database.child("Users").child(user_name).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                User user = mutableData.getValue(User.class);
+                if (user == null) {
+                    return Transaction.success(mutableData);
+                }
+                user.sent.put("1", 1);
+//                user.sentCount ++;
+                mutableData.setValue(user);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                //N/A
+            }
+
+
+        });
     }
 
 }

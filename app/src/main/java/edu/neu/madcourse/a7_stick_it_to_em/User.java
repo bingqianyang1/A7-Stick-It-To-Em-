@@ -4,14 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
-    private String username;
-    private Map<String,Integer> sent;
-    private Map<String,Integer> received;
-    User(String username){
+    public String username;
+    public Map<String,Integer> sent;
+    public Map<String,Integer> received;
+
+    public User(){};
+
+    public User(String username){
         this.username = username;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
-        //sent.put("1",100);
+//        sent.put("1",100);
     }
 
     public String getUsername() {
@@ -28,5 +31,9 @@ public class User {
 
     public Map<String, Integer> getReceived() {
         return received;
+    }
+
+    public void setReceived(){
+        this.received = new HashMap<>();
     }
 }

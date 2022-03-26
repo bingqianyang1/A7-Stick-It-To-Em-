@@ -41,10 +41,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.739" />
 
-    <TextView
+    <EditText
         android:id="@+id/receiver"
-        android:layout_width="203dp"
-        android:layout_height="25dp"
+        android:layout_width="278dp"
+        android:layout_height="59dp"
         android:hint="Please enter a receiver"
         app:layout_constraintBottom_toTopOf="@+id/selectEmoji"
         app:layout_constraintEnd_toEndOf="parent"
