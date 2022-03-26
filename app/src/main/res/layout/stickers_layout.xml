@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/sticker2"
+        android:layout_width="0dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="15dp"
+        android:contentDescription="emoji_1"
+        android:onClick="clickImg"
+        app:layout_constraintEnd_toStartOf="@+id/sticker3"
+        app:layout_constraintStart_toEndOf="@+id/sticker1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sticker1" />
+
+    <ImageView
+        android:id="@+id/sticker1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="2dp"
+        android:contentDescription="emoji_2"
+        android:onClick="clickImg"
+        app:layout_constraintBottom_toBottomOf="@+id/sticker3"
+        app:layout_constraintEnd_toStartOf="@+id/sticker2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sticker2"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/sticker2" />
+
+    <ImageView
+        android:id="@+id/sticker3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="31dp"
+        android:contentDescription="emoji_3"
+        android:onClick="clickImg"
+        app:layout_constraintBottom_toBottomOf="@+id/sticker2"
+        app:layout_constraintEnd_toStartOf="@+id/sticker4"
+        app:layout_constraintStart_toEndOf="@+id/sticker2"
+        app:layout_constraintTop_toTopOf="@+id/sticker2"
+        app:srcCompat="@drawable/sticker3" />
+
+    <ImageView
+        android:id="@+id/sticker4"
+        android:layout_width="57dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="emoji_4"
+        android:onClick="clickImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sticker3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sticker4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
