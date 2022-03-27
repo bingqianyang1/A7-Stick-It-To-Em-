@@ -59,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        receiveHistroy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ShowReceiveHistory.class);
+                intent.putExtra("username", user_name);
+                startActivity(intent);
+            }
+        });
+
+
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference().child("Users");
         // Message Notification

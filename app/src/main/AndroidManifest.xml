@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.A7_Stick_It_To_Em">
         <activity
+            android:name=".ShowReceiveHistory"
+            android:exported="false" />
+        <activity
             android:name=".SendHistoryActivity"
             android:exported="false" />
         <activity
