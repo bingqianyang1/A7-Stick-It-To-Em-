@@ -3,6 +3,10 @@ package edu.neu.madcourse.a7_stick_it_to_em;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,13 +27,15 @@ public class MainActivity extends AppCompatActivity {
     Button receiveHistroy;
     private String user_name;
     private FirebaseDatabase database;
+    private String receiveNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user_name = getIntent().getStringExtra("username");
-
+        receiveNumber = getIntent().getStringExtra("number");
         send = findViewById(R.id.send);
         sendHistory = findViewById(R.id.sendHistory);
         receiveHistroy = findViewById(R.id.receiveHistory);
@@ -55,33 +61,26 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference().child("Users");
-        reference.child(user_name).addChildEventListener(new ChildEventListener() {
+        // Message Notification
+        reference.child(user_name).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Toast.makeText(MainActivity.this, "CHANGED",Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int originNumber = Integer.valueOf(receiveNumber);
+                int currentNumber = Integer.valueOf(snapshot.child("received_Number").getValue().toString());
+                if(currentNumber > originNumber) {
+                    String newSticker = "";
+                    for(DataSnapshot data: snapshot.child("received_history").getChildren()) {
+                        newSticker = data.child("Sticker").getValue().toString();
+                    }
+                    Toast.makeText(MainActivity.this,  "HEY " +
+                            newSticker, Toast.LENGTH_LONG).show();
+                    Notification.sendNotification(MainActivity.this, newSticker);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
     }
 }
