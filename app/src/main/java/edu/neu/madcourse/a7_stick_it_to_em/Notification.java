@@ -23,6 +23,7 @@ public class Notification extends Application {
     }
 
     private void createNotification() {
+        // Check the version of the current sdk and update settings
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
