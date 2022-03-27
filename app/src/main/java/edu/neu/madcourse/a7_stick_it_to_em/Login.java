@@ -31,6 +31,7 @@ public class Login extends AppCompatActivity {
 
         input = findViewById(R.id.username);
         btn = findViewById(R.id.login);
+        btn.setEnabled(false);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,5 +80,6 @@ public class Login extends AppCompatActivity {
 
             }
         });
+        btn.setEnabled(true);
     }
 }
