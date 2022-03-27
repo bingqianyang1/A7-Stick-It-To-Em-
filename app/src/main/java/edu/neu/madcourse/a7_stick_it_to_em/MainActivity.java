@@ -24,8 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
     Button send;
     Button sendHistory;
-    Button receiveHistroy;
-    private String user_name;
+    Button receiveHistory;
+    private String userName;
     private FirebaseDatabase database;
     private String receiveNumber;
 
@@ -34,17 +34,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user_name = getIntent().getStringExtra("username");
+        userName = getIntent().getStringExtra("username");
         receiveNumber = getIntent().getStringExtra("number");
         send = findViewById(R.id.send);
         sendHistory = findViewById(R.id.sendHistory);
-        receiveHistroy = findViewById(R.id.receiveHistory);
+        receiveHistory = findViewById(R.id.receiveHistory);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V) {
                 Intent intent = new Intent(MainActivity.this,SendStickerActivity.class);
-                intent.putExtra("username", user_name);
+                intent.putExtra("username", userName);
                 startActivity(intent);
             }
         });
@@ -54,16 +54,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, SendHistoryActivity.class);
-                i.putExtra("username", user_name);
+                i.putExtra("username", userName);
                 startActivity(i);
             }
         });
 
-        receiveHistroy.setOnClickListener(new View.OnClickListener() {
+        receiveHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ShowReceiveHistory.class);
-                intent.putExtra("username", user_name);
+                intent.putExtra("username", userName);
                 startActivity(intent);
             }
         });
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference().child("Users");
         // Message Notification
-        reference.child(user_name).addValueEventListener(new ValueEventListener() {
+        reference.child(userName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int originNumber = Integer.valueOf(receiveNumber);
