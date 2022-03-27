@@ -4,6 +4,8 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
@@ -37,6 +39,7 @@ public class Notification extends Application {
     public static void sendNotification(Context context, String sticker) {
         android.app.Notification notification = new NotificationCompat.Builder(context, Notification.CHANNEL_ID)
                 .setSmallIcon(getSticker(sticker))
+                .setLargeIcon(BitmapFactory.decodeResource( context.getResources(),getSticker(sticker)))
                 .setContentTitle("You got a new STICKER.")
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)

@@ -82,8 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     for(DataSnapshot data: snapshot.child("received_history").getChildren()) {
                         newSticker = data.child("Sticker").getValue().toString();
                     }
-                    Toast.makeText(MainActivity.this,  "HEY " +
-                            newSticker, Toast.LENGTH_LONG).show();
+                    //Send Notification
                     Notification.sendNotification(MainActivity.this, newSticker);
                 }
             }
