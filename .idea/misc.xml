@@ -10,7 +10,10 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2085" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.19067028985507245" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19067028985507245" />
+        <entry key="app/src/main/res/layout/activity_send_history.xml" value="0.11651469098277609" />
         <entry key="app/src/main/res/layout/activity_send_sticker.xml" value="0.2771621704101563" />
+        <entry key="app/src/main/res/layout/activity_show_receive_history.xml" value="0.21105072463768115" />
+        <entry key="app/src/main/res/layout/history_card.xml" value="0.21105072463768115" />
         <entry key="app/src/main/res/layout/stickers_layout.xml" value="0.33347424493319744" />
       </map>
     </option>
