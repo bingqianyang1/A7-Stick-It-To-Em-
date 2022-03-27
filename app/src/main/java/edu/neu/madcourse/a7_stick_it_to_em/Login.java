@@ -19,8 +19,10 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
     EditText input;
-    Button btn;
+    // LoginButton
+    Button loginButton;
     private String username;
+    // How many received stickers this user has, default 0.
     private String number = "0";
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private DatabaseReference reference = db.getReference().child("Users");
@@ -30,14 +32,26 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         input = findViewById(R.id.username);
-        btn = findViewById(R.id.login);
-        btn.setEnabled(false);
-        btn.setOnClickListener(new View.OnClickListener() {
+        loginButton = findViewById(R.id.login);
+
+        // Disable the loginButton before clicked CHECK
+        loginButton.setEnabled(false);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Login.this,MainActivity.class);
-                Toast.makeText(Login.this, input.getText(),Toast.LENGTH_SHORT).show();
-                username = input.getText().toString();
+                String loginUsername = input.getText().toString();
+
+                // check if the login UserName is the same as the checked one.
+                if(!loginUsername.equals(username)) {
+                    Toast.makeText(Login.this, "Please check your username first.",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Welcome message.
+                Toast.makeText(Login.this, "Welcome! " + input.getText(),Toast.LENGTH_SHORT).show();
+
+                // Set the new user to firebase
                 reference.child(username).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -53,20 +67,24 @@ public class Login extends AppCompatActivity {
                     }
                 });
 
-
+                //Pass the values to the MainActivity
                 intent.putExtra("username", username);
                 intent.putExtra("number", number);
+
+                //Start new Activity
                 startActivity(intent);
             }
         });
     }
 
+    // Function when clicked the CHECK button
     public void onClickCheck(View view) {
         EditText text = findViewById(R.id.username);
         String input = text.getText().toString();
         reference.child(input).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                username = input;
                 if(snapshot.exists()) {
                     String currNumber = snapshot.child("received_Number").getValue().toString();
                     number = currNumber;
@@ -80,6 +98,8 @@ public class Login extends AppCompatActivity {
 
             }
         });
-        btn.setEnabled(true);
+
+        // Enable the login button
+        loginButton.setEnabled(true);
     }
 }
