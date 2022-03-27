@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">A7_Stick_It_To_Em</string>
+    <string name="sending_history">Sending History</string>
+    <string name="count_for_sending_sticker1_sticker2_sticker3_sticker_4">Count for sending sticker1, sticker2, sticker3, sticker 4:</string>
 </resources>
